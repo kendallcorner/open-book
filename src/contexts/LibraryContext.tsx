@@ -1,45 +1,51 @@
-import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import Papa from 'papaparse';
+import {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  ReactNode,
+} from "react";
+import Papa from "papaparse";
 
 // Define types for our book data
 export interface GoodReadsBook {
   "Book Id": string;
-  "Title": string;
-  "Author": string;
+  Title: string;
+  Author: string;
   "Author l-f": string;
   "Additional Authors": string;
-  "ISBN": string;
-  "ISBN13": string;
+  ISBN: string;
+  ISBN13: string;
   "My Rating": string;
   "Average Rating": string;
-  "Publisher": string;
-  "Binding": string;
+  Publisher: string;
+  Binding: string;
   "Number of Pages": string;
   "Year Published": string;
   "Original Publication Year": string;
   "Date Read": string;
   "Date Added": string;
-  "Bookshelves": string;
+  Bookshelves: string;
   "Bookshelves with positions": string;
   "Exclusive Shelf": string;
   "My Review": string;
-  "Spoiler": string;
+  Spoiler: string;
   "Private Notes": string;
   "Read Count": string;
   "Owned Copies": string;
 }
 
 export interface LibraryBook {
-    isbn: string;
-    author?: string;
-    title?: string;
-    cover_i?: string;
-    published?: string;
-    status?: string;
-    rating?: string;
-    dateRead?: string;
-    dateAdded?: string;
-    review?: string;
+  isbn: string;
+  author?: string;
+  title?: string;
+  cover_i?: string;
+  published?: string;
+  status?: string;
+  rating?: string;
+  dateRead?: string;
+  dateAdded?: string;
+  review?: string;
 }
 
 interface LibraryContextType {
@@ -69,7 +75,7 @@ interface LibraryProviderProps {
 }
 
 // The storage key for our library data
-const STORAGE_KEY = 'library_data';
+const STORAGE_KEY = "library_data";
 
 export const LibraryProvider = ({ children }: LibraryProviderProps) => {
   const [books, setBooks] = useState<LibraryBook[]>([]);
@@ -85,8 +91,8 @@ export const LibraryProvider = ({ children }: LibraryProviderProps) => {
           setBooks(JSON.parse(storedData));
         }
       } catch (err) {
-        setError('Failed to load library from storage');
-        console.error('Error loading library data:', err);
+        setError("Failed to load library from storage");
+        console.error("Error loading library data:", err);
       } finally {
         setLoading(false);
       }
@@ -104,49 +110,53 @@ export const LibraryProvider = ({ children }: LibraryProviderProps) => {
 
   // Add books to the library
   const addBooks = (newBooks: LibraryBook[]) => {
-    setBooks(prevBooks => {
+    setBooks((prevBooks) => {
       // Create a map of existing books by ID or title+author for deduplication
       const existingBooks = new Map(
-        prevBooks.map(book => [
+        prevBooks.map((book) => [
           book.isbn || `${book.title}-${book.author}`,
-          book
-        ])
+          book,
+        ]),
       );
 
       // Only add books that don't already exist
-      newBooks.forEach(book => {
+      newBooks.forEach((book) => {
         const bookId = book.isbn || `${book.title}-${book.author}`;
         if (!existingBooks.has(bookId)) {
           existingBooks.set(bookId, book);
         }
       });
-      
+
       return Array.from(existingBooks.values());
     });
   };
 
   const convertGoodReads = (newBooks: GoodReadsBook[]): LibraryBook[] => {
     return newBooks.map((newBook: GoodReadsBook): LibraryBook => {
-      const status = (newBook["Date Read"] || parseInt(newBook['Read Count']) > 0)? 'read' : 'unread'
+      const status =
+        newBook["Date Read"] || parseInt(newBook["Read Count"]) > 0
+          ? "read"
+          : "unread";
       return {
         title: newBook.Title,
         author: newBook.Author,
         isbn: newBook.ISBN13 || newBook.ISBN,
-        published: newBook['Original Publication Year'] || newBook['Year Published'],
+        published:
+          newBook["Original Publication Year"] || newBook["Year Published"],
         status: status,
-        rating: newBook['My Rating'],
-        dateRead: newBook['Date Read'],
-        dateAdded: newBook['Date Added'],
-        review: newBook['My Review']
-      }
-    })
-  }
+        rating: newBook["My Rating"],
+        dateRead: newBook["Date Read"],
+        dateAdded: newBook["Date Added"],
+        review: newBook["My Review"],
+      };
+    });
+  };
 
   // Parse and upload a CSV file
   const uploadCSV = async (file: File): Promise<void> => {
     setLoading(true);
     setError(null);
-    
+
     try {
       return new Promise((resolve, reject) => {
         Papa.parse<GoodReadsBook>(file, {
@@ -161,11 +171,11 @@ export const LibraryProvider = ({ children }: LibraryProviderProps) => {
             setError(`Failed to parse CSV: ${error.message}`);
             setLoading(false);
             reject(error);
-          }
+          },
         });
       });
     } catch (err) {
-      setError('Failed to process CSV file');
+      setError("Failed to process CSV file");
       setLoading(false);
       throw err;
     }
@@ -178,14 +188,14 @@ export const LibraryProvider = ({ children }: LibraryProviderProps) => {
   };
 
   return (
-    <LibraryContext.Provider 
-      value={{ 
-        books, 
-        loading, 
-        error, 
-        addBooks, 
-        uploadCSV, 
-        clearLibrary 
+    <LibraryContext.Provider
+      value={{
+        books,
+        loading,
+        error,
+        addBooks,
+        uploadCSV,
+        clearLibrary,
       }}
     >
       {children}
