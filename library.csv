@@ -1,0 +1,11 @@
+id,title,author,isbn,published,genre,status
+1,"To Kill a Mockingbird","Harper Lee","9780061120084","1960","Fiction","Read"
+2,"1984","George Orwell","9780451524935","1949","Science Fiction","Read"
+3,"The Great Gatsby","F. Scott Fitzgerald","9780743273565","1925","Classic","Reading"
+4,"Pride and Prejudice","Jane Austen","9780141439518","1813","Romance","To Read"
+5,"The Hobbit","J.R.R. Tolkien","9780547928227","1937","Fantasy","Read"
+6,"Harry Potter and the Sorcerer's Stone","J.K. Rowling","9780590353427","1997","Fantasy","Read"
+7,"The Catcher in the Rye","J.D. Salinger","9780316769488","1951","Fiction","To Read"
+8,"The Lord of the Rings","J.R.R. Tolkien","9780618640157","1954","Fantasy","Reading"
+9,"Animal Farm","George Orwell","9780451526342","1945","Political Satire","Read"
+10,"The Da Vinci Code","Dan Brown","9780307474278","2003","Mystery","To Read" 
