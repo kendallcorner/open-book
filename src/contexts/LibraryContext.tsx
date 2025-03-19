@@ -6,7 +6,6 @@ import {
   ReactNode,
 } from "react";
 import Papa from "papaparse";
-import { useOpenBookAPI } from "./OpenBookAPI";
 
 // Define types for our book data
 export interface GoodReadsBook {
