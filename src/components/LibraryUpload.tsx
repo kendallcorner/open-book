@@ -48,7 +48,7 @@ const LibraryUpload = () => {
   return (
     <Box sx={{ my: 2 }}>
       <Typography variant="h6" gutterBottom>
-        Import Library
+        Import Library from Good Reads
       </Typography>
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>

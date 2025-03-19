@@ -6,6 +6,7 @@ import {
   ReactNode,
 } from "react";
 import Papa from "papaparse";
+import { useOpenBookAPI } from "./OpenBookAPI";
 
 // Define types for our book data
 export interface GoodReadsBook {
@@ -133,6 +134,10 @@ export const LibraryProvider = ({ children }: LibraryProviderProps) => {
 
   const convertGoodReads = (newBooks: GoodReadsBook[]): LibraryBook[] => {
     return newBooks.map((newBook: GoodReadsBook): LibraryBook => {
+      // const query = newBook.ISBN13 || newBook.ISBN;
+      // const { data, isLoading, isError, error } = useOpenBookAPI(query);
+
+      // const cover_i = data?.docs[0].cover_i;
       const status =
         newBook["Date Read"] || parseInt(newBook["Read Count"]) > 0
           ? "read"
